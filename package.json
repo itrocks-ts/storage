@@ -21,8 +21,9 @@
 	"files": [
 		"LICENSE",
 		"README.md",
-		"*/storage.d.ts",
-		"*/storage.js"
+		"*/*.d.ts",
+		"*/*.js",
+		"!*/esm.*"
 	],
 	"homepage": "https://it.rocks",
 	"keywords": [
@@ -54,5 +55,5 @@
 		"build:esm": "tsc -p tsconfig.esm.json && node esm/esm"
 	},
 	"types": "./esm/storage.d.ts",
-	"version": "0.0.3"
+	"version": "0.0.4"
 }
