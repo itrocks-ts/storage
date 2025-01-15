@@ -1,0 +1,58 @@
+{
+	"author": {
+		"name": "Baptiste Pillot",
+		"email": "baptiste@pillot.fr"
+	},
+	"dependencies": {
+		"@itrocks/class-type":  "latest",
+		"typescript": "~5.6"
+	},
+	"description": "Transforms model objects to and from storage systems",
+	"devDependencies": {
+		"@types/node": "^22.10"
+	},
+	"engines": {
+		"node": ">=18"
+	},
+	"exports": {
+		"import": "./esm/storage.js",
+		"require": "./cjs/storage.js"
+	},
+	"files": [
+		"LICENSE",
+		"README.md",
+		"*/storage.d.ts",
+		"*/storage.js"
+	],
+	"homepage": "https://it.rocks",
+	"keywords": [
+		"access",
+		"backend",
+		"CRUD",
+		"data",
+		"entity",
+		"it.rocks",
+		"layer",
+		"mapper",
+		"mapping",
+		"ORM",
+		"query",
+		"relational",
+		"source",
+		"storage",
+		"typescript"
+	],
+	"license": "LGPL-3.0-or-later",
+	"name": "@itrocks/storage",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/itrocks-ts/storage.git"
+	},
+	"scripts": {
+		"build": "npm run build:cjs && npm run build:esm",
+		"build:cjs": "tsc -p tsconfig.cjs.json",
+		"build:esm": "tsc -p tsconfig.esm.json && node esm/esm"
+	},
+	"types": "./esm/storage.d.ts",
+	"version": "0.0.1"
+}
