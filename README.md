@@ -16,7 +16,7 @@ It simplifies CRUD operations and object relationship handling, independent of t
 
 ## Core components
 
-- [DataSource](#datasource):
+- [DataSource](#datasource-api):
   The core abstraction for connecting to and performing operations on a storage system.
   It provides generic CRUD methods and is designed to be extended for specific storage implementations
   (e.g., MySQL, PostgreSQL, files, or even APIs).
@@ -39,14 +39,14 @@ npm i @itrocks/storage
 
 ### Setting up a data source
 
-To set up a data source, use the `create` function,
-which initializes a [DataSource](#datasource) based on a configuration object and registers it under a specific name.
+To set up a data source, use the [createDataSource](#createdatasource) function,
+which initializes a [DataSource](#datasource-api) based on a configuration object and registers it under a specific name.
 
 ```ts
-import { create, ds } from '@itrocks/storage'
+import { createDataSource, ds } from '@itrocks/storage'
 
 // Configure a main MySQL data source
-create({
+createDataSource({
 	engine:   '@itrocks/mysql',
 	host:     'localhost',
 	user:     'root',
@@ -78,7 +78,7 @@ await dataSource.delete(user)
 
 ## Creating a Custom Data Source
 
-To create a custom data source implementation, extend the [DataSource](#datasource) abstract class
+To create a custom data source implementation, extend the [DataSource](#datasource-api) abstract class
 and implement its methods:
 
 ```ts
@@ -110,10 +110,11 @@ export default class MyCustomDataSource extends DataSource
 
 ## Registering the Custom Data Source
 
-Once your custom [DataSource](#datasource) is implemented, register it using the [create](#create) function:
+Once your custom [DataSource](#datasource-api) is implemented,
+register it using the [createDataSource](#createDataSource) function:
 
 ```ts
-create({
+createDataSource({
 	engine: './my-custom-data-source',
 	someConfigOption: 'value'
 })
@@ -121,13 +122,13 @@ create({
 
 ## Storage manager Functions API
 
-### create
+### createDataSource
 
 ```ts
-create(config: object, dataSource: string = 'main'): DataSource
+createDataSource(config: object, dataSource: string = 'main'): DataSource
 ```
 
-Creates and registers a new [DataSource](#datasource).
+Creates and registers a new [DataSource](#datasource-api).
 
 **Parameters:**
 - `config`:
@@ -136,7 +137,15 @@ Creates and registers a new [DataSource](#datasource).
   (Optional) Name of the data source. Defaults to `'main'`.
 
 **Returns:**
-The registered [DataSource](#datasource).
+The registered [DataSource](#datasource-api).
+
+### dataSource
+
+```ts
+dataSource(dataSource: string = 'main'): DataSource
+```
+
+Retrieves a registered [DataSource](#datasource-api) by name.
 
 ### ds
 
@@ -144,16 +153,8 @@ The registered [DataSource](#datasource).
 ds(dataSource: string = 'main'): DataSource
 ```
 
-Alias for [get](#get).
-Retrieves a registered [DataSource](#datasource) by name.
-
-### get
-
-```ts
-get(dataSource: string = 'main'): DataSource
-```
-
-Retrieves a registered [DataSource](#datasource) by name.
+Alias for [dataSource](#datasource-api).
+Retrieves a registered [DataSource](#datasource-api) by name.
 
 ## Entity Types API
 
