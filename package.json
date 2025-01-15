@@ -40,8 +40,7 @@
 		"query",
 		"relational",
 		"source",
-		"storage",
-		"typescript"
+		"storage"
 	],
 	"license": "LGPL-3.0-or-later",
 	"name": "@itrocks/storage",
@@ -55,5 +54,5 @@
 		"build:esm": "tsc -p tsconfig.esm.json && node esm/esm"
 	},
 	"types": "./esm/storage.d.ts",
-	"version": "0.0.6"
+	"version": "0.0.7"
 }

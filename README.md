@@ -115,7 +115,7 @@ register it using the [createDataSource](#createDataSource) function:
 
 ```ts
 createDataSource({
-	engine: './my-custom-data-source',
+	engine: __dirname + '/my-custom-data-source',
 	someConfigOption: 'value'
 })
 ```
