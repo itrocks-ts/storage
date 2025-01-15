@@ -13,9 +13,9 @@ export default abstract class DataSource
 		return object as Entity<T>
 	}
 
-	abstract delete<T extends object>(object: Entity<T>, property: KeyOf<Entity<T>>): Promise<T>
+	abstract delete<T extends object>(object: Entity<T>, property?: KeyOf<Entity<T>>): Promise<T>
 
-	abstract deleteId<T extends object>(type: Type<T>, id: Identifier, property: KeyOf<Entity<T>>): void
+	abstract deleteId<T extends object>(type: Type<T>, id: Identifier, property?: KeyOf<Entity<T>>): void
 
 	abstract deleteLink<T extends Entity>(object: T, property: KeyOf<T>, id: Identifier): void
 
