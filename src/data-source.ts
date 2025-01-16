@@ -17,7 +17,7 @@ export default abstract class DataSource
 
 	abstract deleteId<T extends object>(type: Type<T>, id: Identifier, property?: KeyOf<Entity<T>>): void
 
-	abstract deleteLink<T extends Entity>(object: T, property: KeyOf<T>, id: Identifier): void
+	abstract deleteRelatedId<T extends Entity>(object: T, property: KeyOf<T>, id: Identifier): void
 
 	disconnectObject<T extends object>(object: Entity<T>): T
 	{
@@ -25,7 +25,7 @@ export default abstract class DataSource
 		return object
 	}
 
-	abstract insertLink<T extends Entity>(object: T, property: KeyOf<T>, id: Identifier): void
+	abstract insertRelatedId<T extends Entity>(object: T, property: KeyOf<T>, id: Identifier): void
 
 	isObjectConnected<T extends object>(object: MayEntity<T>): object is Entity<T>
 	{
