@@ -4,7 +4,7 @@
 		"email": "baptiste@pillot.fr"
 	},
 	"dependencies": {
-		"@itrocks/class-type":  "latest",
+		"@itrocks/class-type": "latest",
 		"typescript": "~5.6"
 	},
 	"description": "Transforms model objects to and from storage systems",
@@ -54,5 +54,5 @@
 		"build:esm": "tsc -p tsconfig.esm.json && node esm/esm"
 	},
 	"types": "./esm/storage.d.ts",
-	"version": "0.0.7"
+	"version": "0.0.8"
 }
