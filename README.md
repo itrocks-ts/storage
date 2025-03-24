@@ -82,29 +82,45 @@ To create a custom data source implementation, extend the [DataSource](#datasour
 and implement its methods:
 
 ```ts
-import { KeyOf, Type }        from '@itrocks/class-type'
-import { DataSource, Entity } from '@itrocks/storage'
+import {KeyOf, Type} from '@itrocks/class-type'
+import {DataSource, Entity} from '@itrocks/storage'
 
-export default class MyCustomDataSource extends DataSource
+export class MyCustomDataSource extends DataSource
 {
-	constructor(configuration: { someConfigOption: string })
-	{
+	constructor(configuration: { someConfigOption: string }) {
 		super()
 		// Save custom configuration
 	}
 	async delete<T extends object>(object: Entity<T>, property: KeyOf<Entity<T>> = 'id'): Promise<T> {
 		// Custom delete logic
 	}
+	async deleteId<T extends object>(type: Type<T>, id: Identifier, property?: KeyOf<Entity<T>>) {
+		// Custom delete by id logic
+	}
+	async deleteRelatedId<T extends Entity>(object: T, property: KeyOf<T>, id: Identifier) {
+		// Custom delete by related object property id
+	}
+	insertRelatedId<T extends Entity>(object: T, property: KeyOf<T>, id: Identifier) {
+		// Custom insert by related object property id
+	}
 	async read<T extends object>(type: Type<T>, id: Identifier): Promise<Entity<T>> {
 		// Custom read logic
 	}
+	async readCollection<T extends object, PT extends object>(object: Entity<T>, property: KeyOf<T>, type?: Type<PT>): Promise<Entity<PT>[]> {
+		// Custom collection object read logic
+	}
+	async readCollectionIds<T extends object, PT extends object>(object: Entity<T>, property: KeyOf<T>, type?: Type<PT>): Promise<Identifier[]> {
+		// Custom collection object id read logic
+	}
+  async readMultiple<T extends object>(type: Type<T>, ids: Identifier[]): Promise<Entity<T>[]> {
+    // Custom read multiple objects 
+  }
 	async save<T extends object>(object: MayEntity<T>): Promise<Entity<T>> {
 		// Custom save logic
 	}
 	async search<T extends object>(type: Type<T>, search: SearchType<T> = {}): Promise<Entity<T>[]> {
 		// Custom search logic
 	}
-	// Implement other abstract methods
 }
 ```
 
@@ -288,5 +304,5 @@ This allows flexible and dynamic queries based on the properties and their expec
 - **Search Functions**:
   The SearchType will also support functions for more complex criteria beyond simple equality.
   Examples include: `{ birthDate: duringYear(1976), age: greaterThan(48) }`
-  
+
 Combining these features will be possible, such as: `{ 'friends.birthDate': before(new Date('1976-04-25')) }.`
