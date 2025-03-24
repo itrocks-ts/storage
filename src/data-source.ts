@@ -3,8 +3,7 @@ import { Entity, Identifier, MayEntity } from './entity'
 
 export type SearchType<T extends object = object> = Partial<Record<KeyOf<T>, any>> & Record<string, any>
 
-export { DataSource }
-export default abstract class DataSource
+export abstract class DataSource
 {
 
 	connectObject<T extends object>(object: MayEntity<T>, id: Identifier)
