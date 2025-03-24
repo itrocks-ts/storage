@@ -1,3 +1,4 @@
+import { isAnyType }                     from '@itrocks/class-type'
 import { DataSource, SearchType }        from './data-source'
 import { Entity, Identifier, MayEntity } from './entity'
 
@@ -8,7 +9,9 @@ let dataSources: Record<string, DataSource> = {}
 export function createDataSource(config: { engine: string, [key: string]: any }, dataSource = 'main')
 {
 	const { engine, ...engineConfig } = config
-	return dataSources[dataSource]    = new (require(engine).default ?? Object.values(require(engine))[0])(engineConfig)
+	const module = require(engine)
+	const type   = module.default ?? Object.values(module).find(any => isAnyType(any))
+	return dataSources[dataSource] = new type(engineConfig)
 }
 
 export { dataSource as ds }
