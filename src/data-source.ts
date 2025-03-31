@@ -47,7 +47,7 @@ export abstract class DataSource
 
 	abstract search<T extends object>(type: Type<T>, search?: SearchType<T>): Promise<Entity<T>[]>
 
-	async searchOne<T extends object>(type: Type<T>, search?: SearchType<T>): Promise<Entity<T>>
+	async searchOne<T extends object>(type: Type<T>, search?: SearchType<T>): Promise<Entity<T> | undefined>
 	{
 		return (await this.search(type, search))[0]
 	}
