@@ -5,7 +5,7 @@
 	},
 	"dependencies": {
 		"@itrocks/class-type": "latest",
-		"typescript": "~5.6"
+		"typescript": "~5.8"
 	},
 	"description": "Transforms model objects to and from storage systems",
 	"devDependencies": {
@@ -54,5 +54,5 @@
 		"build:esm": "tsc -p tsconfig.esm.json && node esm/esm"
 	},
 	"types": "./esm/storage.d.ts",
-	"version": "0.0.16"
+	"version": "0.0.17"
 }
