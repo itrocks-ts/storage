@@ -82,8 +82,8 @@ To create a custom data source implementation, extend the [DataSource](#datasour
 and implement its methods:
 
 ```ts
-import {KeyOf, Type} from '@itrocks/class-type'
-import {DataSource, Entity} from '@itrocks/storage'
+import { KeyOf, Type } from '@itrocks/class-type'
+import { DataSource, Entity } from '@itrocks/storage'
 
 export class MyCustomDataSource extends DataSource
 {
