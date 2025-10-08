@@ -1,6 +1,11 @@
-import { KeyOf, Type } from '@itrocks/class-type'
-import { Entity, Identifier, MayEntity } from './entity'
+import { KeyOf }      from '@itrocks/class-type'
+import { Type }       from '@itrocks/class-type'
+import { Entity }     from './entity'
+import { Identifier } from './entity'
+import { MayEntity }  from './entity'
+import { Option }     from './option/option'
 
+export type Options = Option | Array<Option>
 export type SearchType<T extends object = object> = Partial<Record<KeyOf<T>, any>> & Record<string, any>
 
 export abstract class DataSource
@@ -31,6 +36,13 @@ export abstract class DataSource
 		return ('id' in object) && !!object.id
 	}
 
+	options(options?: Options): Option[]
+	{
+		return (options instanceof Option) ? [options]
+			: options ? [options]
+			: []
+	}
+
 	abstract read<T extends object>(type: Type<T>, id: Identifier): Promise<Entity<T>>
 
 	abstract readCollection<T extends object, PT extends object>(
@@ -45,7 +57,7 @@ export abstract class DataSource
 
 	abstract save<T extends object>(object: MayEntity<T>): Promise<Entity<T>>
 
-	abstract search<T extends object>(type: Type<T>, search?: SearchType<T>): Promise<Entity<T>[]>
+	abstract search<T extends object>(type: Type<T>, search?: SearchType<T>, options?: Options): Promise<Entity<T>[]>
 
 	async searchOne<T extends object>(type: Type<T>, search?: SearchType<T>): Promise<Entity<T> | undefined>
 	{
