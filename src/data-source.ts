@@ -38,12 +38,17 @@ export abstract class DataSource
 
 	options(options?: Options): Option[]
 	{
-		return (options instanceof Option) ? [options]
-			: options ? [options]
-			: []
+		return Array.isArray(options)
+			? options
+			: (options ? [options] : [])
 	}
 
 	abstract read<T extends object>(type: Type<T>, id: Identifier): Promise<Entity<T>>
+
+	async readAll<T extends object>(type: Type<T>, options?: Options): Promise<Entity<T>[]>
+	{
+		return this.search(type, undefined, options)
+	}
 
 	abstract readCollection<T extends object, PT extends object>(
 		object: Entity<T>, property: KeyOf<T>, type?: Type<PT>
@@ -59,9 +64,11 @@ export abstract class DataSource
 
 	abstract search<T extends object>(type: Type<T>, search?: SearchType<T>, options?: Options): Promise<Entity<T>[]>
 
-	async searchOne<T extends object>(type: Type<T>, search?: SearchType<T>): Promise<Entity<T> | undefined>
+	async searchOne<T extends object>(
+		type: Type<T>, search?: SearchType<T>, options?: Options
+	): Promise<Entity<T> | undefined>
 	{
-		return (await this.search(type, search))[0]
+		return (await this.search(type, search, options))[0]
 	}
 
 }

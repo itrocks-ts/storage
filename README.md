@@ -234,6 +234,20 @@ Reads an [Entity](#entity) from the storage, by its identifier.
 **Returns:**
 A promise resolving to the [Entity](#entity) read from storage.
 
+### readAll
+
+```ts
+readAll(type: Type<T>, options?: Options): Promise<Entity<T>[]>
+```
+
+Read all the stored [entities](#entity).
+
+**Parameters:**
+- `type`:
+  The [class Type](https://github.com/itrocks-ts/class-type#type) of the [entities](#entity) to search.
+- `options`:
+  The [result formatting options](#result-formatting-options).
+
 ### readCollection
 
 ```ts
@@ -273,7 +287,7 @@ The saved [Entity](#entity).
 ### search
 
 ```ts
-search(type: Type<T>, search?: SearchType<T>): Promise<Entity<T>[]>
+search(type: Type<T>, search?: SearchType<T>, options?: Options): Promise<Entity<T>[]>
 ```
 
 Searches for [entities](#entity) matching the criteria.
@@ -283,6 +297,27 @@ Searches for [entities](#entity) matching the criteria.
   The [class Type](https://github.com/itrocks-ts/class-type#type) of the [entities](#entity) to search.
 - `search`:
   The search criteria as a flexible [query object](#searchtype).
+- `options`:
+  The [result formatting options](#result-formatting-options).
+
+### searchOne
+
+```ts
+searchOne(type: Type<T>, search?: SearchType<T>, options?: Options): Promise<Entity<T>[]>
+```
+
+Searches one [entity](#entity) matching the criteria.
+
+It is recommended to use this function only with search criteria that represent a uniqueness constraint
+and match exactly one entity.
+
+**Parameters:**
+- `type`:
+  The [class Type](https://github.com/itrocks-ts/class-type#type) of the [entities](#entity) to search.
+- `search`:
+  The search criteria as a flexible [query object](#searchtype).
+- `options`:
+  The [result formatting options](#result-formatting-options).
 
 ## SearchType
 
@@ -293,6 +328,39 @@ export type SearchType<T extends object = object> = Partial<Record<KeyOf<T>, any
 A `SearchType` is an object used to define search criteria for finding entities in the storage system.
 It maps property names of the target entity to the corresponding values to search for.
 This allows flexible and dynamic queries based on the properties and their expected values.
+
+## Result formatting options
+
+### Sort
+
+```ts
+import { Sort } from '@itrocks/data-source'
+```
+
+Use `Sort` or `new Sort()` to order results by the default sort order
+defined by the [@Sort](https://github.com/itrocks-ts/sort) decorator.
+
+Use `new Sort(['property1', 'propertyN'])` to order results by the values of the specified property paths.
+
+Property paths prefixed with `'-'` will be sorted in descending order.
+
+**Example:**
+
+```ts
+import { Sort } from '@itrocks/data-source'
+import { User } from '@itrocks/user'
+
+// (...)
+
+// No sorting applied
+const unsortedUsers = dataSource.readAll(User)
+
+// Sorted by the default order defined with @Sort
+const sortedUsers = dataSource.readAll(User, Sort)
+
+// Sorted by email ascending, then identifier descending
+const customSortUsers = dataSource.readAll(User, new Sort(['email', '-identifier']))
+```
 
 ## Planned Enhancements
 
