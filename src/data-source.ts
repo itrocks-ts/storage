@@ -19,6 +19,8 @@ export abstract class DataSource
 		return object as Entity<T>
 	}
 
+	abstract count<T extends object>(type: Type<T>, search?: SearchType<T>): Promise<number>
+
 	abstract delete<T extends object>(object: Entity<T>, property?: KeyOf<Entity<T>>): Promise<T>
 
 	abstract deleteId<T extends object>(type: Type<T>, id: Identifier, property?: KeyOf<Entity<T>>): void
