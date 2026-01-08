@@ -4,9 +4,9 @@ import { DataSource } from './data-source'
 export { DataSource, Options, SearchType } from './data-source'
 export { Entity, Identifier, MayEntity }   from './entity'
 
-export { Limit }  from './option/limit'
+export { Limit } from './option/limit'
 export { Option } from './option/option'
-export { Sort }   from './option/sort'
+export { PropertyPath, PropertyPaths, Sort } from './option/sort'
 
 let dataSources: Record<string, DataSource> = {}
 

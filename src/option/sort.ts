@@ -1,8 +1,8 @@
 import { Option }  from './option'
 import { Reverse } from '@itrocks/sort'
 
-type PropertyPath  = string | Reverse
-type PropertyPaths = Array<PropertyPath>
+export type PropertyPath  = string | Reverse
+export type PropertyPaths = Array<PropertyPath>
 
 export class Sort extends Option
 {
