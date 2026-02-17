@@ -9,3 +9,8 @@ export class Limit extends Option
 	}
 
 }
+
+export function limit(limit: number, offset = 0)
+{
+	return new Limit(limit, offset)
+}

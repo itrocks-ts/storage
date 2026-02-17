@@ -20,3 +20,8 @@ export class Sort extends Option
 	}
 
 }
+
+export function sort(properties: PropertyPaths)
+{
+	return new Sort(properties)
+}
