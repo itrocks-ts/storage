@@ -1,11 +1,11 @@
 import { isAnyType }  from '@itrocks/class-type'
 import { DataSource } from './data-source'
 
-export { DataSource, Options, SearchType } from './data-source'
-export { Entity, Identifier, MayEntity }   from './entity'
+export { DataSource, Options, SearchType }             from './data-source'
+export { Entity, Identifier, isIdentifier, MayEntity } from './entity'
 
-export { Limit } from './option/limit'
-export { Option } from './option/option'
+export { Limit }                             from './option/limit'
+export { Option }                            from './option/option'
 export { PropertyPath, PropertyPaths, Sort } from './option/sort'
 
 let dataSources: Record<string, DataSource> = {}
