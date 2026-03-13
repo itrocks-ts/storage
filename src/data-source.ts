@@ -1,4 +1,3 @@
-import { KeyOf }      from '@itrocks/class-type'
 import { Type }       from '@itrocks/class-type'
 import { Entity }     from './entity'
 import { Identifier } from './entity'
@@ -6,7 +5,7 @@ import { MayEntity }  from './entity'
 import { Option }     from './option/option'
 
 export type Options = Option | Array<Option>
-export type SearchType<T extends object = object> = Partial<Record<KeyOf<T>, any>> & Record<string, any>
+export type SearchType<T extends object = object> = Partial<Record<keyof T, any>> & Record<string, any>
 
 export abstract class DataSource
 {
@@ -21,11 +20,11 @@ export abstract class DataSource
 
 	abstract count<T extends object>(type: Type<T>, search?: SearchType<T>): Promise<number>
 
-	abstract delete<T extends object>(object: Entity<T>, property?: KeyOf<Entity<T>>): Promise<T>
+	abstract delete<T extends object>(object: Entity<T>, property?: keyof Entity<T>): Promise<T>
 
-	abstract deleteId<T extends object>(type: Type<T>, id: Identifier, property?: KeyOf<Entity<T>>): void
+	abstract deleteId<T extends object>(type: Type<T>, id: Identifier, property?: keyof Entity<T>): void
 
-	abstract deleteRelatedId<T extends Entity>(object: T, property: KeyOf<T>, id: Identifier): void
+	abstract deleteRelatedId<T extends Entity>(object: T, property: keyof T, id: Identifier): void
 
 	disconnectObject<T extends object>(object: Entity<T>): T
 	{
@@ -33,7 +32,7 @@ export abstract class DataSource
 		return object
 	}
 
-	abstract insertRelatedId<T extends Entity>(object: T, property: KeyOf<T>, id: Identifier): void
+	abstract insertRelatedId<T extends Entity>(object: T, property: keyof T, id: Identifier): void
 
 	isObjectConnected<T extends object>(object: MayEntity<T>): object is Entity<T>
 	{
@@ -55,11 +54,11 @@ export abstract class DataSource
 	}
 
 	abstract readCollection<T extends object, PT extends object>(
-		object: Entity<T>, property: KeyOf<T>, type?: Type<PT>
+		object: Entity<T>, property: keyof T, type?: Type<PT>
 	): Promise<Entity<PT>[]>
 
 	abstract readCollectionIds<T extends object, PT extends object>(
-		object: Entity<T>, property: KeyOf<T>, type?: Type<PT>
+		object: Entity<T>, property: keyof T, type?: Type<PT>
 	): Promise<Identifier[]>
 
 	abstract readMultiple<T extends object>(type: Type<T>, ids: Identifier[]): Promise<Entity<T>[]>
