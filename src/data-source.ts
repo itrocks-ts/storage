@@ -10,6 +10,8 @@ export type SearchType<T extends object = object> = Partial<Record<keyof T, any>
 export abstract class DataSource
 {
 
+	abstract close(): Promise<void>
+
 	connectObject<T extends object>(object: MayEntity<T>, sourceObjectOrId: Entity<T> | Identifier)
 	{
 		(object as Entity<T>).id = (typeof sourceObjectOrId === 'object')
