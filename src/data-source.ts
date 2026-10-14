@@ -5,7 +5,7 @@ import { MayEntity }  from './entity'
 import { Option }     from './option/option'
 
 export type Options = Option | Array<Option>
-export type SearchType<T extends object = object> = Partial<Record<keyof T, any>> & Record<string, any>
+export type SearchType<T extends object = object> = { [P in keyof T]?: any } & Record<string, any>
 
 export abstract class DataSource
 {
