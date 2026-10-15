@@ -300,6 +300,91 @@ Searches for [entities](#entity) matching the criteria.
 - `options`:
   The [result formatting options](#result-formatting-options).
 
+### select
+
+```ts
+select<T extends object>(
+  type: Type<T>, columns: readonly Selection[], search?: SearchType<T>, options?: Options
+): Promise<ProjectionResult<T>>
+```
+
+Requests selected property values, separately from complete entities returned by `search()`.
+All projection types, `SelectionError`, `SelectionErrorCode` and `Identifiers` are named exports from
+`@itrocks/storage`. Existing custom adapters inherit a method that rejects asynchronously with
+`SelectionError('unsupported-selection')`. It never calls `search()`. An adapter must override `select()` to provide
+projection; this package does not resolve paths, build queries or hydrate objects.
+
+```ts
+import { dataSource, SelectionError } from '@itrocks/storage'
+
+class Invoice
+{
+}
+
+try {
+  const result = await dataSource().select(Invoice, ['number', ['customer', 'name']])
+  // result.columns describes the cells in each result.rows entry.
+}
+catch (error) {
+  if (!(error instanceof SelectionError)) throw error
+  console.error(error.code, error.path, error.cause)
+}
+```
+
+`SelectionPath` is `string | readonly string[]`. `Selection` also accepts
+`{ path: SelectionPath; objectFields?: readonly SelectionPath[] }`. Object fields are relative to the selected object.
+Adapters normalise paths to nonempty dot-separated metadata segments without trimming or changing case, reject
+invalid or duplicate paths, and reject object fields on scalar columns. Empty columns request root identities with
+empty cells. Omitted criteria mean no restriction; omitted options use adapter selection defaults.
+
+The result contracts are:
+
+```ts
+type ProjectedObject<T extends object = object> = Partial<T> & { id: Identifier }
+type ProjectionColumn = {
+  path: string
+  kind: 'scalar' | 'object'
+  objectType?: Type
+  objectFields?: readonly string[]
+}
+type ProjectionCell =
+  | { kind: 'value'; value: unknown; loadedFields?: readonly string[] }
+  | { kind: 'absent'; at: string }
+  | { kind: 'unloaded'; reason: 'ignored' }
+type ProjectionRow = { rootId: Identifier; cells: readonly ProjectionCell[] }
+type ProjectionResult<T extends object = object> = {
+  rootType: Type<T>
+  columns: readonly ProjectionColumn[]
+  rows: readonly ProjectionRow[]
+}
+```
+
+`cells[i]` corresponds to `columns[i]`, in requested order. Descriptors remain present when no rows match.
+A loaded scalar `null` or `undefined` is a `value`; `absent.at` identifies the first absent relationship.
+An ignored scalar conversion is `unloaded`. Invalid paths and failed conversions reject instead of returning empty
+successful cells. Object values retain the target prototype and storage identity. They contain only selected fields;
+`objectFields` describes the planned fields and each cell's `loadedFields` describes its actual loaded fields.
+Omitted object fields request directly stored scalar fields plus identity. Never save a `ProjectedObject` as a
+complete entity or infer that unselected fields have been loaded.
+
+Adapters implementing projection must preserve scoped criteria, reject plural selected/sorted paths and unsupported
+options, bind identifiers, and perform conversion at the final property. Selection defaults are ascending root id,
+unbounded rows and no implicit total. Explicit `Sort` options preserve their order and add root id as a unique
+ascending tie-breaker unless already included. `Sort` or `new Sort([])` requests default sort metadata.
+`Limit(limit, offset)` uses nonnegative safe integers and zero-based offset; zero limit means no rows.
+An offset requires a finite limit. Contradictory options reject. `count(type, sameSearch)` provides a separate root
+count without the selection limit. Existing `search()` option behaviour is unchanged.
+
+### SelectionError
+
+```ts
+new SelectionError(code: SelectionErrorCode, path?: string, options?: ErrorOptions)
+```
+
+Extends `Error` with name `SelectionError`, a machine-readable `code`, optional property `path`, and standard
+`options.cause` preservation. Codes are `ambiguous-type`, `conversion`, `invalid-path`, `multiple-values`,
+`unsupported-option` and `unsupported-selection`. The default message is the code, followed by `: path` when given.
+
 ### searchOne
 
 ```ts
@@ -330,6 +415,19 @@ It maps property names of the target entity to the corresponding values to searc
 This allows flexible and dynamic queries based on the properties and their expected values.
 
 ## Result formatting options
+
+### Identifiers
+
+```ts
+import { Identifiers } from '@itrocks/storage'
+
+const visibleRows = new Identifiers([1, '2', 3n])
+```
+
+`Identifiers extends Option` accepts `constructor(readonly ids: readonly Identifier[])` and retains the supplied
+array. Its readonly type does not freeze or copy that array at runtime. Projection adapters deduplicate ids, bind
+them and intersect them with criteria and mandatory scope. Empty ids mean no rows. This option carries the neutral
+restriction; it does not execute a query or change legacy `search()` handling.
 
 ### Sort
 

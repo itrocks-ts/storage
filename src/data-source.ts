@@ -1,8 +1,11 @@
-import { Type }       from '@itrocks/class-type'
-import { Entity }     from './entity'
-import { Identifier } from './entity'
-import { MayEntity }  from './entity'
-import { Option }     from './option/option'
+import { Type }             from '@itrocks/class-type'
+import { Entity }           from './entity'
+import { Identifier }       from './entity'
+import { MayEntity }        from './entity'
+import { Option }           from './option/option'
+import { ProjectionResult } from './projection'
+import { Selection }        from './projection'
+import { SelectionError }   from './selection-error'
 
 export type Options = Option | Array<Option>
 export type SearchType<T extends object = object> = { [P in keyof T]?: any } & Record<string, any>
@@ -74,6 +77,13 @@ export abstract class DataSource
 	): Promise<Entity<T> | undefined>
 	{
 		return (await this.search(type, search, options))[0]
+	}
+
+	async select<T extends object>(
+		type: Type<T>, columns: readonly Selection[], search?: SearchType<T>, options?: Options
+	): Promise<ProjectionResult<T>>
+	{
+		throw new SelectionError('unsupported-selection')
 	}
 
 }

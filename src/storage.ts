@@ -4,9 +4,14 @@ import { DataSource } from './data-source'
 export { DataSource, Options, SearchType }             from './data-source'
 export { Entity, Identifier, isIdentifier, MayEntity } from './entity'
 
-export { Limit }                             from './option/limit'
-export { Option }                            from './option/option'
+export { Identifiers }                      from './option/identifiers'
+export { Limit }                            from './option/limit'
+export { Option }                           from './option/option'
 export { PropertyPath, PropertyPaths, Sort } from './option/sort'
+
+export { ProjectedObject, ProjectionCell, ProjectionColumn, ProjectionResult, ProjectionRow } from './projection'
+export { Selection, SelectionPath }                                                         from './projection'
+export { SelectionError, SelectionErrorCode }                                               from './selection-error'
 
 let dataSources: Record<string, DataSource> = {}
 
